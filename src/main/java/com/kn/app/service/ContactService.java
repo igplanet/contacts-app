@@ -9,11 +9,8 @@ import com.kn.app.entity.Contact;
 import com.kn.app.model.ContactsResponse;
 import com.kn.app.repo.ContactRepo;
 import com.kn.app.util.CSVUtil;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,12 +18,13 @@ import java.util.stream.IntStream;
 import javax.annotation.PostConstruct;
 import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 /**
  *
@@ -43,9 +41,9 @@ public class ContactService {
     @PostConstruct
     public void init() {
         try {
-            File file = ResourceUtils.getFile("classpath:people.csv");
-            InputStream in = new FileInputStream(file);
-            csvUtil.csvToContacts(in);
+            Resource resource = new ClassPathResource("people.csv");
+            InputStream inputStream = resource.getInputStream();
+            csvUtil.csvToContacts(inputStream);
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
