@@ -36,7 +36,7 @@ public class ContactControllerTest {
     @Autowired
     private MockMvc mvc;
     @Autowired
-    ContactRepo contactRepo;
+    private ContactRepo contactRepo;
 
     @Test
     public void whenGetContacts_ThenStatus200() throws Exception {

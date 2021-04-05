@@ -5,8 +5,10 @@
  */
 package com.kn.app.service;
 
+import com.kn.app.entity.ApplicationInfo;
 import com.kn.app.entity.Contact;
 import com.kn.app.model.ContactsResponse;
+import com.kn.app.repo.ApplicationInfoRepo;
 import com.kn.app.repo.ContactRepo;
 import com.kn.app.util.CSVUtil;
 import java.io.IOException;
@@ -34,16 +36,37 @@ import org.springframework.stereotype.Service;
 public class ContactService {
 
     @Autowired
-    ContactRepo contactRepo;
+    private ContactRepo contactRepo;
     @Autowired
-    CSVUtil csvUtil;
+    private CSVUtil csvUtil;
+    @Autowired
+    private ApplicationInfoRepo applicationInfoRepo;
 
+    //Initial list should be one-time populated with people.csv
     @PostConstruct
     public void init() {
         try {
-            Resource resource = new ClassPathResource("people.csv");
-            InputStream inputStream = resource.getInputStream();
-            csvUtil.csvToContacts(inputStream);
+            ApplicationInfo applicationInfo = new ApplicationInfo();;
+
+            Optional<ApplicationInfo> appInfo = applicationInfoRepo.findByInfoName("isDBPopulatedWithPeopleCSV");
+            boolean isAppInfoPresent = appInfo.isPresent();
+
+            boolean isDBPopulatedWithPeopleCSV = false;
+
+            if (isAppInfoPresent) {
+                applicationInfo = appInfo.get();
+                isDBPopulatedWithPeopleCSV = applicationInfo.getInfoValue().equalsIgnoreCase("TRUE");
+            }
+
+            if (!isDBPopulatedWithPeopleCSV) {
+                Resource resource = new ClassPathResource("people.csv");
+                InputStream inputStream = resource.getInputStream();
+                csvUtil.csvToContacts(inputStream);
+
+                applicationInfo.setInfoValue("TRUE");
+                applicationInfo.setInfoName("isDBPopulatedWithPeopleCSV");
+                applicationInfoRepo.save(applicationInfo);
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class CSVUtil {
 
     @Autowired
-    ContactRepo contactRepo;
+    private ContactRepo contactRepo;
 
     public void csvToContacts(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));

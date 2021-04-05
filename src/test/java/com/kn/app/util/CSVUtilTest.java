@@ -36,9 +36,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class CSVUtilTest {
 
     @Autowired
-    CSVUtil csvUtil;
+    private CSVUtil csvUtil;
     @Autowired
-    ContactRepo contactRepo;
+    private ContactRepo contactRepo;
 
     @Test
     public void afterInsertingCSVFileAsContactsOnAppStartUp_ContactTableIsNotEmpty() throws IOException {

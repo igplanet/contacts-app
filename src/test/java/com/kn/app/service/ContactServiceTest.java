@@ -37,7 +37,7 @@ public class ContactServiceTest {
     @Autowired
     private ContactService contactService;
     @Autowired
-    ContactRepo contactRepo;
+    private ContactRepo contactRepo;
 
     @Test
     public void whenPageAndSizeNull_GetContactsReturnsFiveElements() {
