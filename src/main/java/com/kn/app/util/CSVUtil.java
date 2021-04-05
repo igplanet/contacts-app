@@ -27,18 +27,11 @@ public class CSVUtil {
     @Autowired
     ContactRepo contactRepo;
 
-//    public static String TYPE = "text/csv";
-//    static String[] HEADERS = {"name", "url"};
-//
-//    public static boolean hasCSVFormat(MultipartFile file) {
-//        return TYPE.equals(file.getContentType());
-//    }
-    public void csvToContacts(InputStream is) {//List<Contact> csvToContacts(InputStream is) {
+    public void csvToContacts(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                 CSVParser csvParser = new CSVParser(fileReader,
                         CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
-//            List<Contact> contacts = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
@@ -46,14 +39,9 @@ public class CSVUtil {
                         csvRecord.get("name"),
                         csvRecord.get("url")
                 );
-
                 contactRepo.save(contact);
-
-//                contacts.add(contact);
             }
-
-//            return contacts;
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
     }

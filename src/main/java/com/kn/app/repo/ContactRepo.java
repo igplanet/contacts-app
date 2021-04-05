@@ -9,12 +9,14 @@ import com.kn.app.entity.Contact;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author oghomwen.aigbedion
  */
-public interface ContactRepo extends JpaRepository<Contact, Integer> {//CrudRepository<Contact, Integer>{
+@Repository
+public interface ContactRepo extends JpaRepository<Contact, Integer> {
 
     Page<Contact> findByNameContaining(String infix, Pageable pageable);
 }
