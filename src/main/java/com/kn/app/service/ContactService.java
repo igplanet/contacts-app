@@ -15,10 +15,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.annotation.PostConstruct;
-import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -41,6 +42,8 @@ public class ContactService {
     private CSVUtil csvUtil;
     @Autowired
     private ApplicationInfoRepo applicationInfoRepo;
+
+    private static final Logger LOG = Logger.getLogger(ContactService.class.getName());
 
     //Initial list should be one-time populated with people.csv
     @PostConstruct
@@ -67,8 +70,8 @@ public class ContactService {
                 applicationInfo.setInfoName("isDBPopulatedWithPeopleCSV");
                 applicationInfoRepo.save(applicationInfo);
             }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+        } catch (IOException | RuntimeException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
         }
     }
 
