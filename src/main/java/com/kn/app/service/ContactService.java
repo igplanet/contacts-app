@@ -49,7 +49,7 @@ public class ContactService {
     @PostConstruct
     public void init() {
         try {
-            ApplicationInfo applicationInfo = new ApplicationInfo();;
+            ApplicationInfo applicationInfo = new ApplicationInfo();
 
             Optional<ApplicationInfo> appInfo = applicationInfoRepo.findByInfoName("isDBPopulatedWithPeopleCSV");
             boolean isAppInfoPresent = appInfo.isPresent();
