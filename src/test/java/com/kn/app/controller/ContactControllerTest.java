@@ -6,8 +6,6 @@
 package com.kn.app.controller;
 
 import com.kn.app.ContactsApplication;
-import com.kn.app.entity.Contact;
-import com.kn.app.repo.ContactRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,25 +33,11 @@ public class ContactControllerTest {
 
     @Autowired
     private MockMvc mvc;
-    @Autowired
-    private ContactRepo contactRepo;
 
     @Test
-    public void whenGetContacts_ThenStatus200() throws Exception {
+    public void whenContactsIsCalled_HTTPStatusShouldBeOk() throws Exception {
 
         mvc.perform(get("/contacts").contentType(MediaType.TEXT_HTML))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void givenContact_WhenSearchContactsByName_ThenStatus200() throws Exception {
-        String name = "Aigbedion Oghomwen";
-
-        Contact contact = new Contact();
-        contact.setName(name);
-        contactRepo.save(contact);
-
-        mvc.perform(get("/search?name=" + name).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk());
     }
 }

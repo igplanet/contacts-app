@@ -21,9 +21,10 @@
       </style>
    </head>
    <body>
+       <a th:href="@{/contacts}">View all contacts</a>
       <h1>Contacts</h1>
       <div>
-          <form action="/search">
+          <form action="/contacts">
             <label for="search">Search by name:</label>
             <input type="text" id="search" name="name">
             <input type="submit" value="Search">
@@ -46,16 +47,16 @@
          </tbody>
       </table>
       <div>
-      <a th:href="@{/contacts(size=${contactPage.size}, page='1')}">First page</a>
-      <a th:if="${contactPage.number > 0}" th:href="@{/contacts(size=${contactPage.size}, page=${contactPage.number})}" th:text="Previous"></a>
+      <a th:href="@{/contacts(size=${contactPage.size}, page='1', name=${name})}">First page</a>
+      <a th:if="${contactPage.number > 0}" th:href="@{/contacts(size=${contactPage.size}, page=${contactPage.number}, name=${name})}" th:text="Previous"></a>
       <div th:if="${contactPage.totalPages > 0}" class="pagination"
          th:each="pageNumber : ${pageNumbers}">
-         <a th:href="@{/contacts(size=${contactPage.size}, page=${pageNumber})}"
+         <a th:href="@{/contacts(size=${contactPage.size}, page=${pageNumber}, name=${name})}"
             th:text=${pageNumber}
             th:class="${pageNumber==contactPage.number + 1} ? active"></a>
       </div>
-      <a th:if="${(contactPage.number + 1) < contactPage.totalPages}" th:href="@{/contacts(size=${contactPage.size}, page=${contactPage.number + 2})}" th:text="Next"></a>
-      <a th:href="@{/contacts(size=${contactPage.size}, page=${contactPage.totalPages})}">Last page</a>
+      <a th:if="${(contactPage.number + 1) < contactPage.totalPages}" th:href="@{/contacts(size=${contactPage.size}, page=${contactPage.number + 2}, name=${name})}" th:text="Next"></a>
+      <a th:href="@{/contacts(size=${contactPage.size}, page=${contactPage.totalPages}, name=${name})}">Last page</a>
       </div>
       <br>
       <div>

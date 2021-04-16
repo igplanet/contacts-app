@@ -18,5 +18,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ContactRepo extends JpaRepository<Contact, Integer> {
 
-    Page<Contact> findByNameContaining(String infix, Pageable pageable);
+    Page<Contact> findByNameContainingIgnoreCase(String infix, Pageable pageable);
 }

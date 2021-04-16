@@ -26,38 +26,23 @@ public class ContactController {
     private ContactService contactService;
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
-    public String listContacts(
-            Model model,
-            @RequestParam("page") Optional<Integer> page,
-            @RequestParam("size") Optional<Integer> size) {
-
-        ContactsResponse response = contactService.getContacts(page, size);
-
-        model.addAttribute("contactPage", response.getContactPage());
-
-        if (response.getPageNumbers() != null) {
-            model.addAttribute("pageNumbers", response.getPageNumbers());
-        }
-
-        return "index.html";
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search(
+    public String getContacts(
             Model model,
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size,
-            @RequestParam("name") String name) {
+            @RequestParam("name") Optional<String> name) {
 
-        ContactsResponse response = contactService.searchByName(page, size, name);
+        ContactsResponse response = contactService.getContacts(page, size, name);
 
         model.addAttribute("contactPage", response.getContactPage());
-        model.addAttribute("name", name);
 
         if (response.getPageNumbers() != null) {
             model.addAttribute("pageNumbers", response.getPageNumbers());
+            if (name.isPresent()) {
+                model.addAttribute("name", name.get());
+            }
         }
 
-        return "search.html";
+        return "index.html";
     }
 }

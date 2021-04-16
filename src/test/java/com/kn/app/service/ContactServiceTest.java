@@ -5,65 +5,41 @@
  */
 package com.kn.app.service;
 
-import com.kn.app.ContactsApplication;
 import com.kn.app.entity.Contact;
 import com.kn.app.model.ContactsResponse;
-import com.kn.app.repo.ContactRepo;
+import java.util.List;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.data.domain.Page;
 
 /**
  *
  * @author oghomwen.aigbedion
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = ContactsApplication.class)
-@AutoConfigureMockMvc
-@TestPropertySource(
-        locations = "classpath:application-integrationtest.properties")
+@SpringBootTest
 public class ContactServiceTest {
 
     @Autowired
-    private ContactService contactService;
-    @Autowired
-    private ContactRepo contactRepo;
+    ContactService underTest;
 
     @Test
-    public void whenPageAndSizeNull_GetContactsReturnsFiveElements() {
-        Optional<Integer> page = Optional.ofNullable(null);
-        Optional<Integer> size = Optional.ofNullable(null);
-        ContactsResponse contactsResponse = contactService.getContacts(page, size);
+    public void itShouldReturnContacts() {
+        //given
+        Optional<Integer> page = Optional.empty();
+        Optional<Integer> size = Optional.empty();
+        Optional<String> name = Optional.empty();
 
-        assertEquals(contactsResponse.getContactPage().getNumberOfElements(), 5);
-        assertFalse(contactsResponse.getPageNumbers().isEmpty());
-    }
+        //when
+        ContactsResponse contactsResponse = underTest.getContacts(page, size, name);
+        Page<Contact> contacts = contactsResponse.getContactPage();
+        List<Integer> pageNumbers = contactsResponse.getPageNumbers();
 
-    @Test
-    public void afterContactIsSaved_SearchBySavedContactNameReturnsResults() {
-        String name = "Aigbedion Oghomwen";
-
-        Contact contact = new Contact();
-        contact.setName(name);
-        contactRepo.save(contact);
-
-        Optional<Integer> page = Optional.ofNullable(null);
-        Optional<Integer> size = Optional.ofNullable(null);
-
-        ContactsResponse contactsResponse = contactService.searchByName(page, size, name);
-
-        assertTrue(contactsResponse.getContactPage().getTotalElements() > 0);
-        assertFalse(contactsResponse.getPageNumbers().isEmpty());
+        //then
+        Assertions.assertTrue(contacts.hasContent());
+        Assertions.assertTrue(pageNumbers.size() > 0);
     }
 
 }
